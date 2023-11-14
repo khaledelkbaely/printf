@@ -28,8 +28,28 @@ int _printf(const char *format, ...)
 		}
 
 		iter++;
-		switch (*iter)
-		{
+		ret += handle_format_specifier(args, *iter);
+		iter++;
+	}
+
+	va_end(args);
+
+	return (ret);
+}
+
+/**
+ * handle_format_specifier - Handle format specifier and print accordingly
+ * @args: va_list of arguments
+ * @specifier: Format specifier character
+ *
+ * Return: Number of characters printed
+ */
+int handle_format_specifier(va_list args, char specifier)
+{
+	int ret = 0;
+
+	switch (specifier)
+	{
 		case 'c':
 			ret += _putchar(va_arg(args, int));
 			break;
@@ -48,15 +68,10 @@ int _printf(const char *format, ...)
 			break;
 		default:
 			break;
-		}
-		iter++;
 	}
-
-	va_end(args);
 
 	return (ret);
 }
-
 /**
  * _putchar - Write a character to stdout
  * @c: The character to write
@@ -118,8 +133,7 @@ int _print_decimal(long int n)
 
 	sign = n;
 	ret = 0;
-	do
-	{
+	do {
 		remainder = n % 10;
 		s[ret++] = ((sign < 0) ? -remainder : remainder) + '0';
 	} while (n /= 10);
@@ -132,63 +146,3 @@ int _print_decimal(long int n)
 
 	return (ret);
 }
-
-/**
- * _print_binary - Print a binary number to stdout
- * @n: The number to print
- *
- * Return: The number of characters printed
- */
-int _print_binary(unsigned int n)
-{
-	int ret = 0;
-	int binary[32];
-	int i = 0;
-
-	while (n > 0)
-	{
-		binary[i] = n % 2;
-		n /= 2;
-		i++;
-		ret++;
-	}
-
-	for (i--; i >= 0; i--)
-		_putchar('0' + binary[i]);
-
-	return (ret);
-}
-
-/**
- * reverse - Reverse a string
- * @s: The string to reverse
- */
-void reverse(char s[])
-{
-	int i, j;
-	char tmp;
-
-	for (i = 0, j = _strlen(s) - 1; i < j; j--, i++)
-	{
-		tmp = s[i];
-		s[i] = s[j];
-		s[j] = tmp;
-	}
-}
-
-/**
- * _strlen - Calculate the length of a string
- * @str: The string
- *
- * Return: The length of the string
- */
-int _strlen(char *str)
-{
-	int len = 0;
-
-	while (str[len])
-		len++;
-
-	return (len);
-}
-
